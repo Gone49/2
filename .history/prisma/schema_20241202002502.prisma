@@ -1,0 +1,27 @@
+model Doctor {
+  id        Int        @id @default(autoincrement())
+  name      String
+  specialty String
+  // Add the opposite relation to the Patient model
+  patients  Patient[]  @relation("DoctorPatients")
+  // Add the opposite relation to the Appointment model
+  appointments Appointment[]
+}
+
+model Patient {
+  id        Int        @id @default(autoincrement())
+  name      String
+  doctorId  Int?
+  doctor    Doctor?    @relation("DoctorPatients", fields: [doctorId], references: [id])
+  // Other fields...
+}
+
+model Appointment {
+  id        Int        @id @default(autoincrement())
+  patientId Int
+  doctorId  Int
+  // The relation to the Patient model
+  patient   Patient    @relation(fields: [patientId], references: [id])
+  // The relation to the Doctor model
+  doctor    Doctor     @relation(fields: [doctorId], references: [id])
+}

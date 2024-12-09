@@ -1,0 +1,91 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Ensure this points to your PostgreSQL database
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  id                String  @id @default(uuid()) // Use UUID for unique IDs
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  // SERVICE_PROVIDER
+  // DOCTOR
+  // PATIENT
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String   @unique
+  phone         String
+  emailVerified DateTime?
+  image         String?
+  role          UserRole  @default(USER)
+  password      String
+  accounts      Account[]
+  sessions      Session[]
+  isVerfied     Boolean   @default(false)
+  token         Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+
+// model Category {
+//   id          String    @id @default(uuid())
+//   title       String
+//   slug        String    @unique
+//   imageUrl    String?
+//   demoLink    String?
+//   description String?
+//   products    Product[]
+
+//   createdAt   DateTime  @default(now())
+//   updatedAt   DateTime? @updatedAt
+// }
+
+// model Product {
+//   id            String   @id @default(uuid())
+//   title         String
+//   slug          String   @unique
+//   price         Float?
+//   qty           Int?
+//   imageUrl      String?
+//   productImages String[]
+//   features      String[]
+//   description   String?
+//   categoryId    String
+//   category      Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+//   createdAt     DateTime  @default(now())
+//   updatedAt     DateTime? @updatedAt
+// }

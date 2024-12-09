@@ -1,0 +1,29 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Ensure this points to your database
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  name     String?
+  phone    String    @unique
+  role     UserRole
+  password String
+  token    String    // Added to store the generated token
+  accounts Account[] // Define the relationship
+}
+
+
+model Account {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  type        String
+  UserRole     String      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now()) // Auto-generated creation timestamp
+  updatedAt   DateTime  @updatedAt      // Auto-updated timestamp
+}
