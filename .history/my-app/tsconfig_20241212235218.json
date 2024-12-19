@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "ES2017", // Keep this for compatibility, or upgrade to ESNext if needed
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "baseUrl": ".", // Project root
+    "paths": {
+      "@/*": ["src/*"] // Maps @/ to the src folder
+    },
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "module": "esnext", // Keeps module system as ESNext
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve", // For React 17+ JSX Transform
+    "incremental": true,
+    "sourceMap": true, // Enable source maps for debugging
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      },
+      {
+        "name": "next"
+      }
+    ],
+    "noEmit": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next"
+  ]
+}
