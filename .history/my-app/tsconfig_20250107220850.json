@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", // Updated for the latest JS features
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node", // Node resolution for modules
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "sourceMap": true,
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      },
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*" // Updated to reflect `src` directory structure
+      ]
+    },
+    "baseUrl": ".", // Ensures the base path is project root
+    "noEmit": true
+  },
+  "include": [
+    "next-env.d.ts", // Next.js-specific TypeScript environment
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist" // If you have a `dist` folder
+  ]
+}

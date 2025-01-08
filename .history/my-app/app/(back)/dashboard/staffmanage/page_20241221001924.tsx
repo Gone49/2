@@ -1,0 +1,188 @@
+"use client"
+import React, { useState } from 'react';
+
+type Staff = {
+  id: number;
+  name: string;
+  role: string;
+  department: string;
+  address: string;
+  dob: string;
+  age: number;
+  education: string;
+  experience: string;
+};
+
+const initialStaff: Staff[] = [
+  { id: 1, name: 'Dr. John Doe', role: 'Cardiologist', department: 'Cardiology', address: '123 Main St', dob: '1980-05-15', age: 44, education: 'MD', experience: '10 years' },
+  { id: 2, name: 'Nurse Jane Smith', role: 'Nurse', department: 'Emergency', address: '456 Oak St', dob: '1990-02-25', age: 34, education: 'BSN', experience: '5 years' },
+  { id: 3, name: 'Dr. Emily Davis', role: 'Dermatologist', department: 'Dermatology', address: '789 Pine St', dob: '1985-07-10', age: 39, education: 'MD', experience: '8 years' },
+];
+
+const Page = () => {
+  const [staff, setStaff] = useState<Staff[]>(initialStaff);
+  const [newStaff, setNewStaff] = useState<Staff>({
+    id: 0,
+    name: '',
+    role: '',
+    department: '',
+    address: '',
+    dob: '',
+    age: 0,
+    education: '',
+    experience: '',
+  });
+  const [isAdded, setIsAdded] = useState(false);
+
+  // Handle form changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewStaff((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  // Calculate age from DOB
+  const calculateAge = (dob: string) => {
+    const birthDate = new Date(dob);
+    const age = new Date().getFullYear() - birthDate.getFullYear();
+    return age;
+  };
+
+  // Add new staff member
+  const addStaff = () => {
+    if (newStaff.name && newStaff.role && newStaff.department && newStaff.address && newStaff.dob && newStaff.education && newStaff.experience) {
+      const age = calculateAge(newStaff.dob);
+      const newStaffMember = { ...newStaff, age, id: staff.length + 1 };
+      setStaff([...staff, newStaffMember]);
+      setNewStaff({
+        id: 0,
+        name: '',
+        role: '',
+        department: '',
+        address: '',
+        dob: '',
+        age: 0,
+        education: '',
+        experience: '',
+      });
+      setIsAdded(true);
+      setTimeout(() => setIsAdded(false), 1500); // Fade the success message after 1.5s
+    } else {
+      alert("Please fill all fields before submitting.");
+    }
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Staff Management</h1>
+
+      {/* Add New Staff Form */}
+      <div className="mb-4">
+        <input
+          type="text"
+          name="name"
+          value={newStaff.name}
+          onChange={handleInputChange}
+          placeholder="Staff Name"
+          className="border p-2 mr-2 mb-2 w-64"
+        />
+        <input
+          type="text"
+          name="address"
+          value={newStaff.address}
+          onChange={handleInputChange}
+          placeholder="Address"
+          className="border p-2 mr-2 mb-2 w-64"
+        />
+        <input
+          type="date"
+          name="dob"
+          value={newStaff.dob}
+          onChange={handleInputChange}
+          className="border p-2 mr-2 mb-2 w-64"
+        />
+        <input
+          type="text"
+          name="education"
+          value={newStaff.education}
+          onChange={handleInputChange}
+          placeholder="Education"
+          className="border p-2 mr-2 mb-2 w-64"
+        />
+        <input
+          type="text"
+          name="experience"
+          value={newStaff.experience}
+          onChange={handleInputChange}
+          placeholder="Experience"
+          className="border p-2 mr-2 mb-2 w-64"
+        />
+
+        <select
+          name="role"
+          value={newStaff.role}
+          onChange={handleInputChange}
+          className="border p-2 mb-2 w-64"
+        >
+          <option value="">Select Role</option>
+          <option value="Cardiologist">Cardiologist</option>
+          <option value="Nurse">Nurse</option>
+          <option value="Dermatologist">Dermatologist</option>
+          <option value="Wardboy">Wardboy</option>
+          <option value="Dentist">Dentist</option>
+        </select>
+
+        <select
+          name="department"
+          value={newStaff.department}
+          onChange={handleInputChange}
+          className="border p-2 mb-2 w-64"
+        >
+          <option value="">Select Department</option>
+          <option value="Cardiology">Cardiology</option>
+          <option value="Emergency">Emergency</option>
+          <option value="Dermatology">Dermatology</option>
+          <option value="General Ward">General Ward</option>
+          <option value="Dental">Dental</option>
+        </select>
+
+        <button
+          onClick={addStaff}
+          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+        >
+          Add Staff
+        </button>
+      </div>
+
+      {/* Success Notification */}
+      {isAdded && (
+        <div className="transition-opacity duration-500 opacity-100 bg-green-500 text-white p-2 rounded-md mb-4">
+          Staff added successfully!
+        </div>
+      )}
+
+      {/* Staff List */}
+      <div className="staff-list mt-4">
+        {staff.map((member) => (
+          <div
+            key={member.id}
+            className="staff-item bg-white p-4 mb-4 border rounded-lg shadow-md"
+          >
+            <p><strong>Name:</strong> {member.name}</p>
+            <p><strong>Role:</strong> {member.role}</p>
+            <p><strong>Department:</strong> {member.department}</p>
+            <p><strong>Address:</strong> {member.address}</p>
+            <p><strong>DOB:</strong> {member.dob}</p>
+            <p><strong>Age:</strong> {member.age}</p>
+            <p><strong>Education:</strong> {member.education}</p>
+            <p><strong>Experience:</strong> {member.experience}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Page;
